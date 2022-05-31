@@ -4,7 +4,7 @@ function CreateDisk{
     $path = "C:\Users\krzys\Desktop"
 
     SelectDiskType
-
+    SelectDiskSize
 }
 
 function SelectDiskType{
@@ -17,41 +17,41 @@ function SelectDiskType{
         Write-Host "error"
         SelectDiskType
     }
-
-    return $DiskType
 }
 
 function SelectDiskSize{
+    #selecting size unit#
     Write-Host "Size unit: MB, GB, TB"
     $SizeUnit = Read-Host
 
-    <#if ($SizeUnit = "MB") {$SizeUnit = "MB"}
-    elseif ($SizeUnit = "GB") {$SizeUnit = "GB"}
-    elseif ($SizeUnit = "TB") {$SizeUnit = "TB"}
-    else{
-        Write-Host "wrong format, retry"
-        SelectDiskSize
-    }#>
-
-    switch ($SizeUnit) {
-        MB {$SizeUnit -eq "MB"}
-        GB {$SizeUnit -eq "GB"}
-        TB {$SizeUnit -eq "TB"}
-        default {"MB"}
+    while (1) {
+        if ($SizeUnit -match "[MGT]B") {
+            break
+        }else{
+            Write-Host "Size unit: MB, GB, TB"
+            $SizeUnit = Read-Host
+        }
     }
-    
-    Write-Host "Disk size (default ): "
+
+    #selecting disk size#
+    Write-Host "Disk size (default): "
     $DiskSize = Read-Host
+    
+    while (1) {
+        if ($DiskSize -match "^\d+$") {
+            break
+        }else{
+            Write-Host "NaN"
+            Write-Host "Disk size (default): "
+            $DiskSize = Read-Host
+        }
+    }
 
-    #parse to int, not used for now#
-    <#$DiskSize = $DiskSize -as [int]
-
-    if ($DiskSize -is [int]) {
-        Write-Host "yes"
+    #final validation#
+    if ($SizeUnit -eq "MB" -and $DiskSize -lt 3) {
+        Write-Host "Minimal disk size is 3 MB!"
+        SelectDiskSize
     }else{
-        Write-Host "no"
-    }#>
-
-    return $DiskSize+$SizeUnit
-
+        break
+    }
 }

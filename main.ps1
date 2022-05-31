@@ -7,5 +7,5 @@ Write-Host "Hyper-V Disk Manager by Krzysztoff"
 Write-Host "Version:"$version
 #preamble#
 
-#CreateDisk#
-SelectDiskSize
+CreateDisk
+#SelectDiskSize#
